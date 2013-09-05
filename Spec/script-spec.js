@@ -1,109 +1,163 @@
+describe("The Building constructor", function() {
+
   beforeEach(function(){
-    oneLibertySquare = new Building(1500, 17, 1300, 1983)
-  	projectOne = new Building (1400, 11, 700, 2012)
-	landmark = new Building (1250, 22, 1200, 1966)
+    building1 = new Building({
+      squareFootPerStory: 1500, 
+      stories: 17,
+      people: 1500, 
+      yearBuilt: 1983});
 
+    building2 = new Building();
   });
 
-describe("building constructor", function() {
+  describe('returns an object that has', function(){
+    it ('an initial squareFootPerStory value of 0', function(){
+      expect(building2.squareFootPerStory).toBe(0);
+    });
 
-  it("should create a new object that has defined characteristics", function() {
-    expect(oneLibertySquare.squareFootPerStory).toEqual(1500);
-    expect(oneLibertySquare.stories).toEqual(17);
-    expect(oneLibertySquare.people).toEqual(1300);
-    expect(oneLibertySquare.yearBuilt).toEqual(1983);
+    it ('an initial stories value of 0', function(){
+      expect(building2.stories).toBe(0);
+    });
 
+    it ('an initial people value of 0', function(){
+      expect(building2.people).toBe(0);
+    });
+
+    it ('an initial yearBuilt value of 0', function(){
+      expect(building2.yearBuilt).toBe(0);
+    });
+
+    it ('overridden defaults when given an options object', function(){
+      expect(building1.squareFootPerStory).toBe(1500);
+      expect(building1.stories).toBe(17);
+      expect(building1.people).toBe(1500);
+      expect(building1.yearBuilt).toBe(1983)
+    });
+
+  }) //end of 'returns an object that has...'
+
+  describe ("returns an object that can", function() {
+    it ("calculate a building's age", function (){
+      var currentYear = 2013
+      expect(currentYear - building1.yearBuilt).toEqual(30);
+    });
+
+    it ("determine if a building needs renovations", function (){
+      expect(building1.renovationsNeeded()).toBe(true);
+    });
+
+    it ("return the building's capacity", function (){
+      expect(building1.calcCapacity()).toEqual(1275);
+    });
+
+    it ("check to see if a building passes safety code", function () {
+      expect(building1.fireSafetyCheck()).toBe(false);
+    });
+
+    it ("add more stories if the building is over capacity", function (){
+      expect(building1.expand()).toEqual(3)
+    });
+
+  }) //end of 'returns an object that can...'
+
+}) //end of building constructor
+
+describe("The Contractor constructor", function() {
+    beforeEach(function(){
+      contractor1 = new Contractor({
+      name: "General Building Contractor",
+      experienceLevel: 8, 
+      expertise: ["schools", "churches", "offices"],
+      employees: 25 });
+
+      contractor2 = new Contractor({
+      name: "ABC Builders",
+      experienceLevel: 5, 
+      expertise: ["houses", "offices"],
+      employees: 150 });
+
+      contractor3 = new Contractor();
   });
-  
-  it ("should have a function that calculates a building's age", function (){
-  	var currentYear = 2013
-  	expect(currentYear - oneLibertySquare.yearBuilt).toEqual(30);
+  describe('returns an object that has', function(){
+    it ('an initial experience level of 1', function (){
+      expect(contractor3.experienceLevel).toEqual(1);
+    });
+
+  }); //end of 'returns an object that has...'
+
+  describe('returns an object that can', function(){
+
+    it ("hire more employees", function (){
+      expect(contractor1.hire(10)).toEqual(35);
+    });
+
+    it ("calculate how many buildings the contractor can work on", function() {
+      expect(contractor2.buildingsUnderConstruction()).toEqual(10);
+    }); 
+
+    it ("find the right contractor based on expertise", function() {
+      expect(contractor1.findContractExpert()).toBe(true);
+    });
+
+    it ("determine the contractor with the most experience", function(){
+      expect(contractor1.findMostExperience(contractor2)).toBe("General Building Contractor")
+    });
+
+    it ("calculate the number of buildings completed in a year", function(){
+      var averageDays = 90
+      var year = 365 
+      expect(contractor2.annualBuildingsComplete()).toEqual(40);
+    });
+  }); //end of 'returns an object that can...'
+}); //end of contractor constructor
+
+//plane constructor tests 
+
+describe("The Airplane constructor", function() {
+    beforeEach(function(){
+      airplane1 = new Airplane({
+      name: "Boeing 747",
+      maxCapacity: 600, 
+      range: 9200,
+      milesToDestination: 2500,
+      fuelCapacity: 64000,
+      employees: 15,
+      speedMph: 700 });
+
+      airplane2 = new Airplane({
+      name: "Airbus A380",
+      maxCapacity: 850, 
+      range: 9800,
+      milesToDestination: 2500,
+      fuelCapacity: 85000,
+      employees: 20,
+      speedMph: 600 });
+
+      airplane3 = new Airplane();
   });
 
-  it ("should have a function that determines if a building is a skyscraper", function (){
-  	expect(oneLibertySquare.skyscraper()).toBe(true);
-  });
+  describe('returns an object that can', function(){
 
-  it ("should have a function that determines if a building needs renovations", function (){
-  	expect(oneLibertySquare.renovationsNeeded()).toBe(true);
-  });
+    it ("calculate miles per gallon", function (){
+      expect(airplane1.fuelEffiency()).toEqual(0.14375);
+    });
 
-  it ("should have a function that returns the building's capacity", function (){
-  	expect(oneLibertySquare.capacity()).toEqual(1275);
-  })
+    it ("calculate price per passenger for given destination", function(){
+      expect(airplane1.pricePerPassenger()).toEqual(116);
+    });
 
-  it ("should have a function that checks to see if a building passes safety code", function () {
-  	expect(oneLibertySquare.fireSafetyCheck()).toBe(false);
-  })
+    it ("finds operational costs", function(){
+      expect(airplane1.airplaneCosts()).toEqual(99565)
+    });
 
+    it ("compare operational costs to other objects", function (){
+      expect(airplane1.airplaneCostComparer(airplane2)).toBe("Airbus A380")
+    });
 
-  // it ("should find the largest building", function () {
-  // 	expect(largestBuilding()).toContain(landmark)
-  // })
+    it("calculate how many hours it will take to fly to given destination", function (){
+      expect(airplane1.flightTime()).toEqual(4)
+    });
 
+  }); //end of 'returns an object that can...'
+}); //end of plane constructor
 
-
-
-
-
-
-
-  // it ("should test the oldest building", function (){
-  // 	expect(oldestBuilding()).toEqual(oneLibertySquare.age);
-  // });
-}) //end of buildings constructor describer
-
-
-
-
-// describe ("buildings constructor", function (){
-// 	it ("should return a new Building object", function () {
-// 		expect(new Building).toContain();
-// 	})
-// })
-
-
-
-// // function Muppet(age, hobby) {
-// //   this.age = age;
-// //   this.hobby = hobby;
-
-// //   this.answerNanny = function(){
-// // 	return "Everything's cool!";
-// //   }
-// // }
-
-// // function SwedishChef(age, hobby, mood) {
-// //   Muppet.call(this, age, hobby);
-// //   this.mood = mood;
-
-// //   this.cook = function() {
-// //     return "Mmmm soup!";
-// //   }
-// // }
-
-// // SwedishChef.prototype = new Muppet();
-
-// describe("About inheritance", function() {
-//   beforeEach(function(){
-//     this.muppet = new Muppet(2, "coding");
-// 	this.swedishChef = new SwedishChef(2, "cooking", "chillin");
-//   });
-
-//   it("should be able to call a method on the derived object", function() {
-//     expect(this.swedishChef.cook()).toEqual('Mmmm soup!');
-//   });
-
-//   it("should be able to call a method on the base object", function() {
-//     expect(this.swedishChef.answerNanny()).toEqual("Everything's cool!");
-//   });
-
-//   it("should set constructor parameters on the base object", function() {
-//     expect(this.swedishChef.age).toEqual(2);
-//     expect(this.swedishChef.hobby).toEqual('cooking');
-//   });
-
-//   it("should set constructor parameters on the derived object", function() {
-//     expect(this.swedishChef.mood).toEqual('chillin');
-//   });
-// });
