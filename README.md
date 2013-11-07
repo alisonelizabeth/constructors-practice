@@ -1,3 +1,3 @@
 constructors-practice
 =====================
-Spec page: http://alisonelizabeth.github.io/constructors-practice/SpecRunner.html
+This is a junk repo. Just practicing using Javascript constructors. 
